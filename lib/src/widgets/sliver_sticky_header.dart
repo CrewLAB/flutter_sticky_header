@@ -129,6 +129,11 @@ class SliverStickyHeaderState {
 
   @override
   int get hashCode => Object.hash(scrollPercentage, isPinned);
+
+  @override
+  String toString() {
+    return 'SliverStickyHeaderState{scrollPercentage: $scrollPercentage, isPinned: $isPinned}';
+  }
 }
 
 /// A sliver that displays a header before its sliver.

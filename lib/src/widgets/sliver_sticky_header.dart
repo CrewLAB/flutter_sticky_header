@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
 // import 'package:flutter_sticky_header/src/rendering/sliver_sticky_header.dart';
 import '../rendering/sliver_sticky_header.dart';
 import 'package:value_layout_builder/value_layout_builder.dart';
@@ -58,18 +59,16 @@ class DefaultStickyHeaderController extends StatefulWidget {
   /// StickyHeaderController controller = DefaultStickyHeaderController.of(context);
   /// ```
   static StickyHeaderController? of(BuildContext context) {
-    final _StickyHeaderControllerScope? scope = context
-        .dependOnInheritedWidgetOfExactType<_StickyHeaderControllerScope>();
+    final _StickyHeaderControllerScope? scope =
+        context.dependOnInheritedWidgetOfExactType<_StickyHeaderControllerScope>();
     return scope?.controller;
   }
 
   @override
-  _DefaultStickyHeaderControllerState createState() =>
-      _DefaultStickyHeaderControllerState();
+  _DefaultStickyHeaderControllerState createState() => _DefaultStickyHeaderControllerState();
 }
 
-class _DefaultStickyHeaderControllerState
-    extends State<DefaultStickyHeaderController> {
+class _DefaultStickyHeaderControllerState extends State<DefaultStickyHeaderController> {
   StickyHeaderController? _controller;
 
   @override
@@ -121,18 +120,15 @@ class SliverStickyHeaderState {
   final bool isPinned;
 
   @override
-  bool operator ==(dynamic other) {
-    if (identical(this, other)) return true;
-    if (other is! SliverStickyHeaderState) return false;
-    final SliverStickyHeaderState typedOther = other;
-    return scrollPercentage == typedOther.scrollPercentage &&
-        isPinned == typedOther.isPinned;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SliverStickyHeaderState &&
+          runtimeType == other.runtimeType &&
+          scrollPercentage == other.scrollPercentage &&
+          isPinned == other.isPinned;
 
   @override
-  int get hashCode {
-    return hashValues(scrollPercentage, isPinned);
-  }
+  int get hashCode => Object.hash(scrollPercentage, isPinned);
 }
 
 /// A sliver that displays a header before its sliver.
@@ -153,7 +149,7 @@ class SliverStickyHeader extends RenderObjectWidget {
     Key? key,
     this.header,
     this.sliver,
-    this.overlapsContent: false,
+    this.overlapsContent = false,
     this.sticky = true,
     this.reverse = false,
     this.controller,
@@ -170,15 +166,14 @@ class SliverStickyHeader extends RenderObjectWidget {
     Key? key,
     required SliverStickyHeaderWidgetBuilder builder,
     Widget? sliver,
-    bool overlapsContent: false,
+    bool overlapsContent = false,
     bool sticky = true,
     bool reverse = false,
     StickyHeaderController? controller,
   }) : this(
           key: key,
           header: ValueLayoutBuilder<SliverStickyHeaderState>(
-            builder: (context, constraints) =>
-                builder(context, constraints.value),
+            builder: (context, constraints) => builder(context, constraints.value),
           ),
           sliver: sliver,
           overlapsContent: overlapsContent,
@@ -220,8 +215,7 @@ class SliverStickyHeader extends RenderObjectWidget {
   }
 
   @override
-  SliverStickyHeaderRenderObjectElement createElement() =>
-      SliverStickyHeaderRenderObjectElement(this);
+  SliverStickyHeaderRenderObjectElement createElement() => SliverStickyHeaderRenderObjectElement(this);
 
   @override
   void updateRenderObject(
@@ -255,7 +249,7 @@ class SliverStickyHeaderBuilder extends StatelessWidget {
     Key? key,
     required this.builder,
     this.sliver,
-    this.overlapsContent: false,
+    this.overlapsContent = false,
     this.sticky = true,
     this.reverse = false,
     this.controller,
@@ -303,8 +297,7 @@ class SliverStickyHeaderBuilder extends StatelessWidget {
 
 class SliverStickyHeaderRenderObjectElement extends RenderObjectElement {
   /// Creates an element that uses the given widget as its configuration.
-  SliverStickyHeaderRenderObjectElement(SliverStickyHeader widget)
-      : super(widget);
+  SliverStickyHeaderRenderObjectElement(SliverStickyHeader widget) : super(widget);
 
   @override
   SliverStickyHeader get widget => super.widget as SliverStickyHeader;
@@ -343,8 +336,7 @@ class SliverStickyHeaderRenderObjectElement extends RenderObjectElement {
 
   @override
   void insertRenderObjectChild(RenderObject child, int? slot) {
-    final RenderSliverStickyHeader renderObject =
-        this.renderObject as RenderSliverStickyHeader;
+    final RenderSliverStickyHeader renderObject = this.renderObject as RenderSliverStickyHeader;
     if (slot == 0) renderObject.header = child as RenderBox?;
     if (slot == 1) renderObject.child = child as RenderSliver?;
     assert(renderObject == this.renderObject);
@@ -357,8 +349,7 @@ class SliverStickyHeaderRenderObjectElement extends RenderObjectElement {
 
   @override
   void removeRenderObjectChild(RenderObject child, slot) {
-    final RenderSliverStickyHeader renderObject =
-        this.renderObject as RenderSliverStickyHeader;
+    final RenderSliverStickyHeader renderObject = this.renderObject as RenderSliverStickyHeader;
     if (renderObject.header == child) renderObject.header = null;
     if (renderObject.child == child) renderObject.child = null;
     assert(renderObject == this.renderObject);

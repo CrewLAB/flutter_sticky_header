@@ -225,7 +225,7 @@ class RenderSliverStickyHeader extends RenderSliver with RenderSliverHelpers {
         case AxisDirection.up:
           // this was working ... but maybe this is getting in the way of what we should be re-positioning
           if (_reverse)
-            childParentData!.paintOffset = Offset(0.0, -headerExtent);
+            childParentData!.paintOffset = Offset(0.0, 0);
           else
             childParentData!.paintOffset = Offset.zero; // reverse
           break;
@@ -307,6 +307,8 @@ class RenderSliverStickyHeader extends RenderSliver with RenderSliverHelpers {
   bool hitTestChildren(SliverHitTestResult result,
       {required double mainAxisPosition, required double crossAxisPosition}) {
     assert(geometry!.hitTestExtent > 0.0);
+
+    // Hit test header first
     if (header != null && (geometry!.paintExtent - mainAxisPosition < _headerExtent!)) {
       final didHitHeader = hitTestBoxChild(
         BoxHitTestResult.wrap(SliverHitTestResult.wrap(result)),
@@ -314,16 +316,18 @@ class RenderSliverStickyHeader extends RenderSliver with RenderSliverHelpers {
         mainAxisPosition: geometry!.paintExtent - mainAxisPosition + childMainAxisPosition(header),
         crossAxisPosition: crossAxisPosition,
       );
-
-      return didHitHeader ||
-          (_overlapsContent &&
-              child != null &&
-              child!.geometry!.hitTestExtent > 0.0 &&
-              child!.hitTest(result, mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition));
-    } else if (child != null && child!.geometry!.hitTestExtent > 0.0) {
-      return child!.hitTest(result, mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition);
+      if (didHitHeader) return true;
     }
-    return super.hitTestChildren(result, mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition);
+
+    // Hit test child sliver
+    if (child != null && child!.geometry!.hitTestExtent > 0.0) {
+      final bool hitChild =
+          child!.hitTest(result, mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition);
+
+      return hitChild;
+    }
+
+    return false;
   }
 
   @override
@@ -372,7 +376,7 @@ class RenderSliverStickyHeader extends RenderSliver with RenderSliverHelpers {
 
       // The header must be drawn over the sliver.
       if (header != null) {
-        context.paintChild(header!, offset + headerParentDataOffset!);
+        context.paintChild(header!, offset + (_reverse ? Offset.zero : headerParentDataOffset!));
       }
     }
   }

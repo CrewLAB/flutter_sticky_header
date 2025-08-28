@@ -323,7 +323,7 @@ class RenderSliverStickyHeader extends RenderSliver with RenderSliverHelpers {
     } else if (child != null && child!.geometry!.hitTestExtent > 0.0) {
       return child!.hitTest(result, mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition);
     }
-    return super.hitTestChildren(result, mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition);
+    return false;
   }
 
   @override

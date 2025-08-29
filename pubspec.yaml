@@ -1,4 +1,4 @@
-name: flutter_sticky_header
+name: cl_flutter_sticky_header
 description: Flutter implementation of sticky headers as a sliver. Use it in a CustomScrollView.
 version: 0.6.4
 homepage: https://github.com/letsar/flutter_sticky_header
